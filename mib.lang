@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ This file is based on GtkSourceView by Alexander Eichner <aeichner@freitagsrunde.org>
+
+ Author: Austin Boyle <Austin.Boyle@aviatnet.com>
+
+ GtkSourceView is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ GtkSourceView is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<language id="mib" _name="MIB" version="2.0" _section="Sources">
+  <metadata>
+    <property name="globs">*.[Mm]ib;*.MIB;*.[Mm]i2;*.MI2</property>
+    <property name="line-comment-start">-- </property>
+    <property name="block-comment-start">/*</property>
+    <property name="block-comment-end">*/</property>
+  </metadata>
+
+  <styles>
+    <style id="module-handler" _name="Module Handler" map-to="def:preprocessor"/>
+    <style id="comment"        _name="Comment"        map-to="def:comment"/>
+    <style id="common-defines" _name="Common Defines" map-to="def:special-constant"/>
+    <style id="error"          _name="Error"          map-to="def:error"/>
+    <style id="string"         _name="String"         map-to="def:string"/>
+    <style id="keyword"        _name="Keyword"        map-to="def:keyword"/>
+    <style id="boolean"        _name="Boolean value"  map-to="def:boolean"/>
+    <style id="decimal"        _name="Decimal number" map-to="def:decimal"/>
+    <style id="type"           _name="Data Type"      map-to="def:type"/>
+    <style id="keysymbol"      _name="Keysymbol"      map-to="def:keyword"/>
+  </styles>
+
+  <definitions>
+
+    <context id="comment" style-ref="comment" end-at-line-end="true" class="comment" class-disabled="no-spell-check">
+      <start>-- </start>
+      <include>
+        <context ref="def:in-line-comment"/>
+      </include>
+    </context>
+
+    <context id="decimal" style-ref="decimal">
+      <match>(?&lt;![\w\.])([1-9][0-9]*|0)[lL]?(?![\w\.])</match>
+    </context>
+
+    <context id="comment-multiline" style-ref="comment" class="comment" class-disabled="no-spell-check">
+      <start>/\*</start>
+      <end>\*/</end>
+      <include>
+        <context ref="def:in-comment"/>
+      </include>
+    </context>
+
+    <context id="close-comment-outside-comment" style-ref="error">
+      <match>\*/(?!\*)</match>
+    </context>
+
+    <context id="string" style-ref="string" end-at-line-end="true" class="string" class-disabled="no-spell-check">
+      <start>"</start>
+      <end>"</end>
+    </context>
+
+    <context id="module-handler" style-ref="module-handler">
+      <keyword>IMPORT</keyword>
+      <keyword>COMPLETELY</keyword>
+      <keyword>ONLY</keyword>
+    </context>
+
+    <context id="keywords" style-ref="keyword">
+      <keyword>SYNTAX</keyword>
+      <keyword>DEFINITIONS</keyword>
+      <keyword>MAX-ACCESS</keyword>
+      <keyword>STATUS</keyword>
+      <keyword>DESCRIPTION</keyword>
+      <keyword>INDEX</keyword>
+      <keyword>OF</keyword>
+      <keyword>BEGIN</keyword>
+      <keyword>IMPORTS</keyword>
+      <keyword>FROM</keyword>
+      <keyword>LAST-UPDATED</keyword>
+      <keyword>REVISION</keyword>
+      <keyword>ORGANIZATION</keyword>
+      <keyword>CONTACT-INFO</keyword>
+      <keyword>OBJECTS</keyword>
+      <keyword>MANDATORY-GROUPS</keyword>
+      <keyword>MODULE</keyword>
+    </context>
+
+    <context id="keysymbol" style-ref="keyword">
+      <keyword>::=</keyword>
+
+      <keyword>-&gt;</keyword>
+    </context>
+
+    <context id="types" style-ref="type">
+      <keyword>OBJECT IDENTIFIER</keyword>
+      <keyword>OBJECT-TYPE</keyword>
+      <keyword>MODULE-IDENTITY</keyword>
+      <keyword>MODULE-COMPLIANCE</keyword>
+      <keyword>OBJECT-GROUP</keyword>
+      <keyword>SEQUENCE</keyword>
+      <keyword>not-accessible</keyword>
+      <keyword>current</keyword>
+      <keyword>read-only</keyword>
+      <keyword>read-write</keyword>
+      <keyword>Integer32</keyword>
+      <keyword>TruthValue</keyword>
+      <keyword>DisplayString</keyword>
+    </context>
+
+    <context id="boolean" style-ref="boolean">
+      <keyword>true</keyword>
+      <keyword>TRUE</keyword>
+      <keyword>false</keyword>
+      <keyword>FALSE</keyword>
+    </context>
+
+    <context id="mib" class="no-spell-check">
+      <include>
+        <context ref="comment"/>
+        <context ref="decimal"/>
+        <context ref="comment-multiline"/>
+        <context ref="close-comment-outside-comment"/>
+        <context ref="string"/>
+        <context ref="module-handler"/>
+        <context ref="keywords"/>
+        <context ref="keysymbol"/>
+        <context ref="types"/>
+        <context ref="boolean"/>
+      </include>
+    </context>
+
+  </definitions>
+</language>
